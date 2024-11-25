@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-replica
+spec:
+  serviceName: mysql-replica
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysql-replica
+  
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mysql-replica
+    spec:
+      
+      containers:
+        - name: mysql-replica
+          image: mysql:8.4
+          env:
+            - name: MYSQL_DATABASE
+              value: app
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_SSL_MODE
+              value: REQUIRED
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/mysql/my.cnf
+              name: mysql-replica-cm0
+              subPath: my.cnf
+            - mountPath: /docker-entrypoint-initdb.d/init.sql
+              name: mysql-replica-cm1
+              subPath: init.sql
+            - mountPath: /etc/mysql/certs/ca-cert.pem
+              name: mysql-replica-cm2
+              subPath: ca-cert.pem
+            - mountPath: /etc/mysql/certs/client-cert.pem
+              name: mysql-replica-cm3
+              subPath: client-cert.pem
+            - mountPath: /etc/mysql/certs/client-key.pem
+              name: mysql-replica-cm4
+              subPath: client-key.pem
+              
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: my.cnf
+                path: my.cnf
+            name: mysql-replica-cm0
+          name: mysql-replica-cm0
+        - configMap:
+            items:
+              - key: init.sql
+                path: init.sql
+            name: mysql-replica-cm1
+          name: mysql-replica-cm1
+        - configMap:
+            items:
+              - key: ca-cert.pem
+                path: ca-cert.pem
+            name: mysql-replica-cm2
+          name: mysql-replica-cm2
+        - configMap:
+            items:
+              - key: client-cert.pem
+                path: client-cert.pem
+            name: mysql-replica-cm3
+          name: mysql-replica-cm3
+        - configMap:
+            items:
+              - key: client-key.pem
+                path: client-key.pem
+            name: mysql-replica-cm4
+          name: mysql-replica-cm4

@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  init.sql: "CHANGE REPLICATION SOURCE TO \n  SOURCE_HOST='mysql-source',\n  SOURCE_USER='slave_user',\n  SOURCE_PASSWORD='password',\n  SOURCE_AUTO_POSITION=1,\n  SOURCE_SSL=1,\n  SOURCE_SSL_CA='/etc/mysql/certs/ca-cert.pem',\n  SOURCE_SSL_CERT='/etc/mysql/certs/client-cert.pem',\n  SOURCE_SSL_KEY='/etc/mysql/certs/client-key.pem';\n\n\nSTART REPLICA;\n"
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: mysql-replica
+  name: mysql-replica-cm1

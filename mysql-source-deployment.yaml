@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-source
+spec:
+  serviceName: mysql-source
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysql-source
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mysql-source
+    spec:
+      initContainers:
+      - name: setup-certs
+        image: mysql
+        command:
+          - sh
+          - -c
+          - |
+              echo "Copying certs to writable directory...";
+              cp /etc/mysql/certs/* /writable-certs/ &&
+              chown -R mysql:mysql /writable-certs &&
+              chmod 600 /writable-certs/server-key.pem &&
+              chmod 644 /writable-certs/server-cert.pem &&
+              chmod 644 /writable-certs/ca-cert.pem
+        volumeMounts:
+          - name: mysql-source-cm3
+            mountPath: /etc/mysql/certs/ca-cert.pem
+            subPath: ca-cert.pem
+          - name: mysql-source-cm4
+            mountPath: /etc/mysql/certs/server-cert.pem
+            subPath: server-cert.pem
+          - name: mysql-source-cm5
+            mountPath: /etc/mysql/certs/server-key.pem
+            subPath: server-key.pem
+          - name: writable-certs
+            mountPath: /writable-certs
+
+      containers:
+      - name: mysql-source
+        image: mysql:8.4
+        securityContext:
+          readOnlyRootFilesystem: false
+        env:
+          - name: MYSQL_DATABASE
+            value: app
+          - name: MYSQL_ROOT_PASSWORD
+            value: password
+          - name: MYSQL_SSL_MODE
+            value: REQUIRED
+        ports:
+          - containerPort: 3306
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /etc/mysql/my.cnf
+            name: mysql-source-cm0
+            subPath: my.cnf
+          - mountPath: /var/lib/mysql
+            name: mysql-source-claim1
+          - mountPath: /docker-entrypoint-initdb.d/init.sql
+            name: mysql-source-cm2
+            subPath: init.sql
+          - mountPath: /etc/mysql/certs
+            name: writable-certs
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: my.cnf
+                path: my.cnf
+            name: mysql-source-cm0
+          name: mysql-source-cm0
+        - name: mysql-source-claim1
+          persistentVolumeClaim:
+            claimName: mysql-source-claim1
+        - configMap:
+            items:
+              - key: init.sql
+                path: init.sql
+            name: mysql-source-cm2
+          name: mysql-source-cm2
+        - configMap:
+            items:
+              - key: ca-cert.pem
+                path: ca-cert.pem
+            name: mysql-source-cm3
+          name: mysql-source-cm3
+        - configMap:
+            items:
+              - key: server-cert.pem
+                path: server-cert.pem
+            name: mysql-source-cm4
+          name: mysql-source-cm4
+        - configMap:
+            items:
+              - key: server-key.pem
+                path: server-key.pem
+            name: mysql-source-cm5
+          name: mysql-source-cm5
+        - name: writable-certs
+          emptyDir: {}

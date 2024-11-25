@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  client-key.pem: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDPeDCCrZ0oGlUX
+    GeQaEEw7ZIbG1HgjHEBkSUEBJqX2UXe4Dkf1XStxRopnjjhv6mZXqntCckXqsyld
+    89R5i0E5G/XS53CP/nC4HCLfMRZKyGstr/k7ADJOyj54fZsQW0Cd+Qx4fJGYk73V
+    qbo8c3o5wfRQ0Pl/tGyas1ihNF3BSa8d8hIq3rzAbaOaTctX1vHNSLmsV0VTObB/
+    ifmiLsfbJLc+LBuBqiNtpYcTxhxWNYgdTlJo9M128uYJ5xbeeYkz9+Lx031WVxc+
+    VzDtPb1aSscl1sakoiFnsUvEK85bWuyqZYrMmfpFJju+auxMUYpHlBR4tlYeiWyF
+    gCdz1bCLAgMBAAECggEAXGC60OT3Dg0ziBa6LzTEjMmFDXE7kP6aWU0YyadozFWY
+    Bfct6T20AzsSk2uLC6IGMdCyE3MIWKmvqKrSF9B+mSwu99qfjy4PCJtWl6SmtWOp
+    /WzWf4Pl4plA2aur6MuI6Q4klF17AsH+C+4IA7SzXpZS780s2sT+ep+Sviyv9kjH
+    tIX2kbaRQhuYQgDtqeMN3Aa38iOr2YAjG/n/EKtbQX2V4BKV+qqH88CuxBnOxhlw
+    EI+aJxIzZdZLkp1eawY/Or6fvhfFM/c8ddWZg3/DxsIh1OFJefmNmZQNHAdb+URq
+    SnboKSFGFKyLg2DYJ9fOZTcjtbzddJVySt/i610l6QKBgQD9BasRrY1HnfGbi3Xi
+    CfMFwCRpQKQOGM8+0uIu3IzitBqM7QfiFmZjh9jmZURNAxoJNSrVsTRiQ8ZzkBBX
+    +TZH8bKvDTBJ31az4NyQAhb6L8pnNA1301e1PXzOHie0wQKK9GmvrildKwg+yjbQ
+    gEPXbEgDGVCMJ/xZj77dwoynTQKBgQDR6UaCg7ZfJyBp4Op+wEXhuZoUtI2SVSES
+    TdH4s2GXRwSgXf+Y5nl+zP4yyUtU6MvfQAKeLiNNT365Vbr6uQqz+PUBh+C7KBPH
+    +Kt9fjU8MQDAUF1+1DY48Gvk3DOhlcerPu0M+X5imvDQrZi+7j3XhKJpJVn83i5W
+    W9xGX8s7NwKBgAMXq6SWq3BhpM9S4Aj4OCks1QUYTikB8p6A81TBS1OGAgEQ8JS5
+    01yKD4OZX0FVtV7BcJmWBd7hly5YZ2q72Ab/FEEBd0Kf4S5npCp6bA94wA+M2lFJ
+    mvvTGZBnW/LgnQhXvmbwSP8jhIFH9W2M88dRQnwPNiXQY0ww7pNFSnTNAoGBAMnu
+    xZvspVaoRzBT5IIG6bMaX7Wnc8HgDy6SmnnL5wgmk7bKdoZawWpQPgIRT1zhjq63
+    30zYSbGn1drpNDTaKge0ac4NLw4codrvx9mzvfanlXdsWGUYNQlVkBXcF/dMJYcB
+    w/2FTiYBs8SsG5MhkXBw8eSAwC7Ydm8xc5hnsxTFAoGBAMd4vrnb13b/S1FNIIQl
+    GprQW7amJuT7k+51MufzSOHmF5J6p5JWcVj7YOw/NZYFaKqmbvEivlgCqzrHnpW0
+    1mZAiuRZ7w+SVd7kjhBEkptiouIS9pxB8UrUmNdCRrvlixusnhu0CaIwPfpS6upY
+    /LCi3i63iicTC5K/WxF+QZVp
+    -----END PRIVATE KEY-----
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: mysql-replica
+  name: mysql-replica-cm4

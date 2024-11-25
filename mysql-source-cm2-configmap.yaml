@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  init.sql: |
+    DROP USER IF EXISTS 'slave_user'@'%';
+    CREATE USER 'slave_user'@'%' IDENTIFIED  BY 'password' REQUIRE SSL;
+    GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'%';
+    FLUSH PRIVILEGES;
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: mysql-source
+  name: mysql-source-cm2

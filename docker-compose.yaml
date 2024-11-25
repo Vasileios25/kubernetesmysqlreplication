@@ -1,0 +1,54 @@
+services:
+
+  mysql_source:
+    container_name: source_sql
+    build:
+      context: .
+      dockerfile: Dockerfile.master
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: app
+      MYSQL_SSL_MODE: REQUIRED
+    volumes:
+      - ./master/my.cnf:/etc/mysql/my.cnf
+      - ./master/data:/var/lib/mysql
+      - ./master/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./certs_sql/ca-cert.pem:/etc/mysql/certs/ca-cert.pem
+      - ./certs_sql/server-cert.pem:/etc/mysql/certs/server-cert.pem
+      - ./certs_sql/server-key.pem:/etc/mysql/certs/server-key.pem
+    ports:
+      - 3306:3306
+
+    networks:
+      - backend
+
+
+
+  mysql_replica:
+    container_name: replica_sql
+    build:
+      context: .
+      dockerfile: Dockerfile.replica
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: app
+      MYSQL_SSL_MODE: REQUIRED
+    volumes:
+      - ./slave/my.cnf:/etc/mysql/my.cnf
+      - ./slave/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./certs_sql/ca-cert.pem:/etc/mysql/certs/ca-cert.pem
+      - ./certs_sql/client-cert.pem:/etc/mysql/certs/client-cert.pem
+      - ./certs_sql/client-key.pem:/etc/mysql/certs/client-key.pem
+
+    ports:
+      - 3307:3306
+    networks:
+      - backend
+
+networks:
+  backend:
+  frontend:
+    driver: bridge
+    internal: false
+
+
