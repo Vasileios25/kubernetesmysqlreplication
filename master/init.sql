@@ -2,3 +2,10 @@ DROP USER IF EXISTS 'slave_user'@'%';
 CREATE USER 'slave_user'@'%' IDENTIFIED  BY 'password' REQUIRE SSL;
 GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'%';
 FLUSH PRIVILEGES;
+
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
